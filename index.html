@@ -1,0 +1,1297 @@
+<!doctype html><html><head><meta name="migration-region" content="east-asia"><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta charset="utf-8">
+<title>Migration across East Asia &amp; Siberia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A year of bird migration from Siberia and East Asia to China, Japan, Korea, Southeast Asia and Australia, animated from seasonal sightings.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=DM+Mono:wght@400&display=swap">
+<style>
+  /* Layout: a full-bleed night globe with the instruments set into its dark corners, as on a chart table. */
+  :root {
+    color-scheme: dark;
+    --space: #000;
+    --ink: #f3efe6;
+    --ink-soft: #b9b3a6;
+    --ink-faint: #7d786d;
+    --rule: rgba(243, 239, 230, .24);
+    --display: "Jost", "Futura", "Century Gothic", "Trebuchet MS", sans-serif;
+    --data: "DM Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+    --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+    --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+    --gutter-b: max(14px, env(safe-area-inset-bottom, 0px));
+  }
+  html, body { height: 100%; margin: 0; background: var(--space); color: var(--ink); overflow: hidden; }
+  body { font-family: var(--display); }
+  #globe { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; object-fit: contain; }
+  #labels { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+  .place {
+    position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 6px; white-space: nowrap;
+    font-size: 14px; font-weight: 500; text-shadow: 0 0 5px #000, 0 0 2px #000; will-change: transform, opacity;
+  }
+  .place::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 1px rgba(0,0,0,.6); }
+
+  #title { position: fixed; top: max(16px, env(safe-area-inset-top, 0px)); left: var(--gutter-l); pointer-events: none; }
+  #title h1 { margin: 0; font-size: clamp(20px, 2.4vw, 30px); font-weight: 500; letter-spacing: .01em; line-height: 1.1; text-wrap: balance; text-shadow: 0 0 8px #000; }
+  #title { max-width: calc(100vw - 32px); }
+  #edition { display: inline-block; margin-top: 9px; pointer-events: auto; font-size: 12px; color: var(--ink-soft); text-underline-offset: 3px; }
+  #route { box-sizing: border-box; position: fixed; top: 95px; left: var(--gutter-l); max-width: min(350px, calc(100vw - 32px)); padding: 12px 14px; border: 1px solid var(--rule); border-radius: 4px; background: rgba(0,0,0,.82); font-size: 13px; line-height: 1.45; }
+  #route[hidden] { display: none; }
+  #route strong { font-size: 15px; font-weight: 500; }
+  #route p { margin: 5px 0 0; color: var(--ink-soft); }
+  #route a, #notes a { color: inherit; text-underline-offset: 3px; }
+  #route small { display: block; margin-top: 7px; color: var(--ink-faint); font-size: 11px; }
+  body.asia .sp { grid-template-columns: 11px auto; }
+  body.asia .sp b { display: none; }
+  body.asia #notes { max-width: 49ch; }
+
+  #legend { position: fixed; left: var(--gutter-l); bottom: var(--gutter-b); max-width: min(560px, calc(100vw - 150px)); display: flex; flex-direction: column; gap: 8px; }
+  #legend h2 { margin: 0; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; text-shadow: 0 0 6px #000; }
+  #species { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; width: max-content; max-width: 100%; }
+  .sp {
+    all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: 11px auto auto; align-items: center; column-gap: 8px;
+    font-size: 14px; line-height: 19px; color: var(--ink); text-shadow: 0 0 5px #000; border-radius: 3px; padding-inline: 2px;
+    transition: opacity .2s;
+  }
+  .sp i { width: 11px; height: 11px; display: block; border-radius: 1px; }
+  .sp b { font-family: var(--data); font-weight: 400; font-size: 12px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .sp:hover { background: rgba(243, 239, 230, .1); }
+  .sp:focus-visible, #play:focus-visible, #export:focus-visible, #dial:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  #species.isolating .sp[aria-pressed="false"] { opacity: .45; }
+  #notes { font-size: 12px; line-height: 1.4; color: var(--ink-soft); text-shadow: 0 0 5px #000; max-width: 62ch; }
+  #notes p { margin: 0; }
+  #notes .fine { font-size: 11px; color: var(--ink-faint); margin-top: 2px; }
+
+  #clock { position: fixed; right: var(--gutter-r); bottom: var(--gutter-b); width: 148px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  #dial { width: 148px; height: 148px; display: block; cursor: grab; touch-action: none; border-radius: 50%; }
+  #dial:active { cursor: grabbing; }
+  #dial text { font-family: var(--display); fill: var(--ink-soft); font-size: 11px; text-anchor: middle; dominant-baseline: central; }
+  #dial #date { fill: var(--ink); font-size: 21px; font-weight: 500; }
+  #dial #stage { fill: var(--ink-soft); font-size: 10.5px; letter-spacing: .02em; }
+  #play, #export {
+    all: unset; white-space: nowrap; cursor: pointer; font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--ink);
+    border: 1px solid var(--rule); border-radius: 3px; padding: 2px 12px; background: rgba(0,0,0,.45);
+  }
+  #play:hover, #export:hover { border-color: var(--ink); }
+  #export[hidden] { display: none; }
+  #status { position: fixed; inset: 0; display: grid; place-items: center; font-size: 16px; color: var(--ink-soft); text-align: center; padding-inline: 24px; pointer-events: none; }
+  #status[hidden] { display: none; }
+
+  @media (max-width: 640px) {
+    #title h1 { font-size: 20px; }
+    #title h1 { max-width: 30ch; }
+    #edition { font-size: 11px; margin-top: 7px; }
+    #route { top: 87px; font-size: 12px; padding: 9px 11px; }
+    #route p { margin-top: 3px; }
+    #route small { font-size: 10px; }
+    .sp { font-size: 12px; line-height: 15px; grid-template-columns: 9px auto auto; column-gap: 6px; }
+    .sp i { width: 9px; height: 9px; }
+    .sp b { font-size: 10.5px; }
+    #legend { gap: 5px; max-width: calc(100vw - 32px); }
+    #legend h2 { font-size: 11px; }
+    #notes { font-size: 10.5px; }
+    #notes .fine { font-size: 9.5px; }
+    #clock { width: 104px; bottom: calc(var(--gutter-b) + 92px); }
+    body.asia #clock { bottom: calc(var(--gutter-b) + 83px); }
+    body.asia .sp { grid-template-columns: 9px auto; }
+    #dial { width: 104px; height: 104px; }
+    .place { font-size: 12px; }
+  }
+</style>
+
+<canvas id="globe" aria-label="Animated globe of the Americas with coloured dots for migrating birds"></canvas>
+<div id="labels" aria-hidden="true"></div>
+
+<header id="title"><h1>Migration across East Asia &amp; Siberia</h1><a id="edition" href="?region=east-asia">East Asia &amp; Siberia ↗</a></header>
+<aside id="route" aria-live="polite" aria-label="Selected bird's migration" hidden></aside>
+
+<section id="legend" aria-label="Species">
+  <h2>A year of migration</h2>
+  <ul id="species"></ul>
+  <div id="notes">
+    <p>Dots scale with population, compressed. Each dot stands for many birds.</p>
+    <p class="fine">Simulated from eBird reports (GBIF). Counts: Partners in Flight, USFWS, BirdLife, Audubon. Arctic Tern count is worldwide and Red Knot is one subspecies. Fork-tailed Flycatcher and White-crested Elaenia counts unknown, dots assumed.
+      Imagery: NASA. Borders and lakes: Natural Earth. Concept after Aaron J. Becker, mapped.earth.</p>
+  </div>
+</section>
+
+<section id="clock" aria-label="Time of year">
+  <svg id="dial" viewBox="0 0 148 148" role="slider" tabindex="0" aria-label="Date in the year" aria-valuemin="0" aria-valuemax="364" aria-valuenow="0">
+    <circle cx="74" cy="74" r="58" fill="rgba(0,0,0,.72)"/>
+    <circle cx="74" cy="74" r="53" fill="none" stroke="rgba(243,239,230,.2)" stroke-width="6"/>
+    <path id="arc" fill="none" stroke="#f3efe6" stroke-width="6"/>
+    <g id="months"></g>
+    <text id="date" x="74" y="68"></text>
+    <text id="stage" x="74" y="90"></text>
+  </svg>
+  <button id="play" type="button">Pause</button>
+  <button id="export" type="button" hidden>Export MP4</button>
+</section>
+<div id="status">Loading the year's sightings…</div>
+
+<script>
+"use strict";
+const BINS = 24;
+const TEX_W = 2048;
+const YEAR_SECONDS = 72;
+// Total dots on the globe. Species share them by the square root of population, so adding a species keeps density.
+const DOT_BUDGET = 118376;
+// A flock is settled while its typical dots shift less than this many degrees north or south in a half-month.
+const SETTLED_SHIFT = 3;
+// Size of the per-species arrays in the shaders.
+const MAX_SPECIES = 24;
+const REGION = new URLSearchParams(location.search).get("region") || document.querySelector('meta[name="migration-region"]')?.content || "americas";
+const ASIA = REGION === "east-asia";
+let COLORS = {
+  "Swainson's Thrush": "#ff7a59", "Blackpoll Warbler": "#b9a7ff", "Ruby-throated Hummingbird": "#ee3f6d",
+  "Rufous Hummingbird": "#ffa62b", "Snow Goose": "#e9f6ff", "Bobolink": "#ffe066",
+  "Fork-tailed Flycatcher": "#4fd6a8", "Sandhill Crane": "#5ab4ff", "Swainson's Hawk": "#d9c28a",
+  "Franklin's Gull": "#38d9e8", "American Golden-Plover": "#8fe04a", "Hudsonian Godwit": "#ff7ad9",
+  "Semipalmated Sandpiper": "#00a6a6", "White-crested Elaenia": "#2fa36b", "Purple Martin": "#7b61ff",
+  "Arctic Tern": "#c850ff", "Red Knot": "#d6523c",
+};
+// Named stopovers and wintering grounds. Each lights up only when the data puts birds there.
+let PLACES = [
+  ["Platte River", 40.8, -99.5], ["Prairie Potholes", 48.5, -100], ["Boreal Forest", 56, -112], ["Hudson Bay Lowlands", 55, -87],
+  ["Copper River Delta", 60.4, -145], ["Baffin Island", 70, -73], ["Delaware Bay", 39, -75.2], ["Central Valley", 38, -121.5],
+  ["Gulf Coast", 29.6, -92], ["Sierra Madre", 23, -105], ["Veracruz", 19.2, -96.4], ["Yucatán", 19.6, -89],
+  ["Panama", 8.8, -79.6], ["Llanos", 6.5, -69], ["Amazon Basin", -4, -62], ["Andean Foothills", -8, -75.5],
+  ["Humboldt Coast", -12.5, -77], ["Pantanal", -17.5, -57], ["Gran Chaco", -23, -61], ["Pampas", -35, -62],
+  ["Chiloé", -42.5, -73.8], ["Tierra del Fuego", -53.5, -68], ["Patagonia", -45, -70], ["Bay of Fundy", 45, -65.5],
+  ["Northeast Brazil Coast", -2, -44.5], ["Antarctic Peninsula", -64, -60],
+];
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+const LABEL_FONT = '500 14px Jost, Futura, "Century Gothic", sans-serif';
+const COUNT_FONT = '400 12px "DM Mono", Consolas, monospace';
+const INK = "#f3efe6", INK_SOFT = "#b9b3a6", INK_FAINT = "#8a8579";
+const MUXER_URL = "https://cdn.jsdelivr.net/npm/mp4-muxer@5.1.3/build/mp4-muxer.min.js";
+
+const $ = (id) => document.getElementById(id);
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+const wrapLongitude = (lon) => ((lon + 180) % 360 + 360) % 360 - 180;
+// Keep the Pacific edge continuous while sampling and interpolating Siberian birds.
+const trackLongitude = (lon) => ASIA ? 130 + wrapLongitude(lon - 130) : lon;
+const smoothstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+const hexRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
+
+function rng(seed) {
+  return () => {
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function formatCount(n) {
+  if (n == null) return "unknown";
+  if (n >= 1e6) return `${+(n / 1e6).toFixed(1)} M`;
+  return `${Math.round(n / 1e3)} k`;
+}
+
+/* ---------- Tracks ----------
+   Every dot keeps a fixed pair of ranks (u, v) all year. In each half-month, u picks its latitude from the
+   species' north-south distribution and v picks its longitude within that latitude band. Each dot therefore
+   holds its relative place in the flock, follows the observed distribution, and closes the loop after a year. */
+
+function indexBin(bin, cell) {
+  const rows = [], rowCum = [], rowStart = [];
+  const cum = new Float64Array(bin.w.length);
+  let total = 0;
+  for (const w of bin.w) total += w;
+  let acc = 0, rowAcc = 0;
+  for (let i = 0; i < bin.w.length; i++) {
+    if (i === 0 || bin.r[i] !== bin.r[i - 1]) {
+      if (i) rowCum.push(acc / total);
+      rows.push(bin.r[i]);
+      rowStart.push(i);
+    }
+    acc += bin.w[i];
+    cum[i] = acc;
+  }
+  rowCum.push(1);
+  rowStart.push(bin.w.length);
+  return { rows, rowCum, rowStart, cum, cols: bin.c, total, cell };
+}
+
+function locate(arr, x, lo, hi) {
+  while (lo < hi) {
+    const m = (lo + hi) >> 1;
+    if (arr[m] <= x) lo = m + 1; else hi = m;
+  }
+  return lo;
+}
+
+function sampleInto(ix, u, v, out, at) {
+  const row = Math.min(locate(ix.rowCum, u, 0, ix.rows.length - 1), ix.rows.length - 1);
+  const uLo = row ? ix.rowCum[row - 1] : 0;
+  const fr = (u - uLo) / Math.max(1e-9, ix.rowCum[row] - uLo);
+  const a = ix.rowStart[row], b = ix.rowStart[row + 1];
+  const base = a ? ix.cum[a - 1] : 0;
+  const span = ix.cum[b - 1] - base;
+  const target = base + v * span;
+  const c = Math.min(locate(ix.cum, target, a, b - 1), b - 1);
+  const cLo = c ? ix.cum[c - 1] : 0;
+  const fc = c === a ? (target - base) / Math.max(1e-9, ix.cum[c] - base) : (target - cLo) / Math.max(1e-9, ix.cum[c] - cLo);
+  out[at] = trackLongitude(-180 + (ix.cols[c] + clamp(fc, 0, 1)) * ix.cell);
+  out[at + 1] = -90 + (ix.rows[row] + fr) * ix.cell;
+}
+
+/* Global land lookup, with wrapped neighbours on either side of the Pacific seam. */
+function landGrid(img) {
+  const size = 1024;
+  const width = 2048;
+  const c = document.createElement("canvas");
+  c.width = width; c.height = size;
+  const ctx = c.getContext("2d", { willReadFrequently: true });
+  ctx.drawImage(img, 0, 0, width, size);
+  const px = ctx.getImageData(0, 0, width, size).data;
+  const nearest = new Int32Array(width * size).fill(-1);
+  const queue = new Int32Array(width * size);
+  let head = 0, tail = 0;
+  // A cell counts only if its neighbours are land too, which keeps resting dots just inside the shoreline.
+  const solid = (i) => i >= 0 && i < nearest.length && px[i * 4] > 127;
+  for (let i = 0; i < nearest.length; i++) {
+    const x = i % width;
+    const left = x ? i - 1 : i + width - 1, right = x < width - 1 ? i + 1 : i - width + 1;
+    if (solid(i) && solid(left) && solid(right) && solid(i - width) && solid(i + width)) { nearest[i] = i; queue[tail++] = i; }
+  }
+  while (head < tail) {
+    const i = queue[head++];
+    const x = i % width;
+    for (const n of [x ? i - 1 : i + width - 1, x < width - 1 ? i + 1 : i - width + 1, i - width, i + width]) {
+      if (n >= 0 && n < nearest.length && nearest[n] < 0) { nearest[n] = nearest[i]; queue[tail++] = n; }
+    }
+  }
+  const cell = (lon, lat) => clamp(Math.floor((90 - lat) / 180 * size), 0, size - 1) * width + clamp(Math.floor((wrapLongitude(lon) + 180) / 360 * width), 0, width - 1);
+  return {
+    isLand: (lon, lat) => { const i = cell(lon, lat); return nearest[i] === i; },
+    nearest(lon, lat) {
+      const i = nearest[cell(lon, lat)];
+      return [trackLongitude(((i % width) + 0.5) / width * 360 - 180), 90 - (Math.floor(i / width) + 0.5) / size * 180];
+    },
+  };
+}
+
+/* Gives a resting dot its spot in the flock and makes sure that spot is on land or at the shore. */
+function settle(track, at, jx, jy, rand, land) {
+  const lon = track[at], lat = track[at + 1];
+  const stretch = 1 / Math.max(0.2, Math.cos(lat * Math.PI / 180));
+  let x = lon + jx * stretch, y = lat + jy;
+  for (let tries = 0; tries < 6 && !land.isLand(x, y); tries++) {
+    x = lon + (rand() - 0.5) * 1.8 * stretch;
+    y = lat + (rand() - 0.5) * 1.8;
+  }
+  if (!land.isLand(x, y)) {
+    const [nx, ny] = land.nearest(lon, lat);
+    x = nx; y = ny;
+    for (let tries = 0; tries < 4; tries++) {
+      const tx = nx + (rand() - 0.5) * 0.7 * stretch, ty = ny + (rand() - 0.5) * 0.7;
+      if (land.isLand(tx, ty)) { x = tx; y = ty; break; }
+    }
+  }
+  track[at] = trackLongitude(x);
+  track[at + 1] = y;
+}
+
+/* Sightings shift a little between half-months, which reshuffles ranks even when a flock is going nowhere and would
+   send dots streaking across the continent in mid-winter. While a species' latitude range holds steady, its dots
+   rest in one place for the whole spell. */
+function holdSettledFlocks(track, species, speciesCount) {
+  const key = (i, b) => (i * BINS + ((b % BINS) + BINS) % BINS) * 2;
+  for (let s = 0; s < speciesCount; s++) {
+    const dots = [];
+    for (let i = 0; i < species.length; i++) if (species[i] === s) dots.push(i);
+    const steady = [];
+    for (let b = 0; b < BINS; b++) {
+      const shift = new Float32Array(dots.length);
+      const shiftLon = ASIA ? new Float32Array(dots.length) : null;
+      dots.forEach((i, k) => { shift[k] = track[key(i, b + 1) + 1] - track[key(i, b) + 1]; });
+      shift.sort();
+      if (shiftLon) {
+        dots.forEach((i, k) => { shiftLon[k] = (track[key(i, b + 1)] - track[key(i, b)]) * Math.cos(track[key(i, b) + 1] * Math.PI / 180); });
+        shiftLon.sort();
+      }
+      steady.push([0.2, 0.5, 0.8].every((q) => Math.abs(quantile(shift, q)) < SETTLED_SHIFT && (!shiftLon || Math.abs(quantile(shiftLon, q)) < SETTLED_SHIFT)));
+    }
+    const first = steady.indexOf(false);
+    if (first < 0) continue;
+    for (let b = first + 1; b < first + BINS; b++) {
+      if (!steady[b % BINS]) continue;
+      let end = b;
+      while (end < first + BINS && steady[end % BINS]) end++;
+      // Hops b to end-1 are steady, so keys b to end all belong to this spell. Each dot rests at the spot nearest
+      // its median position, so one half-month of stray reports cannot hold it somewhere odd all season.
+      const size = end - b + 1;
+      const xs = new Float32Array(size), ys = new Float32Array(size);
+      for (const i of dots) {
+        for (let n = 0; n < size; n++) { xs[n] = track[key(i, b + n)]; ys[n] = track[key(i, b + n) + 1]; }
+        const midX = quantile(xs.slice().sort(), 0.5), midY = quantile(ys.slice().sort(), 0.5);
+        let best = 0, bestDist = Infinity;
+        for (let n = 0; n < size; n++) {
+          const dist = (xs[n] - midX) ** 2 + (ys[n] - midY) ** 2;
+          if (dist < bestDist) { bestDist = dist; best = n; }
+        }
+        for (let n = 0; n < size; n++) { track[key(i, b + n)] = xs[best]; track[key(i, b + n) + 1] = ys[best]; }
+      }
+      b = end;
+    }
+  }
+}
+
+function buildTracks(meta, land) {
+  const spec = meta.species;
+  const weight = spec.map((s) => Math.sqrt(s.population ?? s.assumed));
+  const scale = DOT_BUDGET / weight.reduce((a, b) => a + b, 0);
+  const counts = weight.map((w) => Math.round(w * scale));
+  const n = counts.reduce((a, b) => a + b, 0);
+  const rand = rng(20261104);
+  const species = new Float32Array(n);
+  let at = 0;
+  counts.forEach((c, s) => { species.fill(s, at, at + c); at += c; });
+  // Shuffled so no species is always painted on top of another.
+  for (let i = n - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    const t = species[i]; species[i] = species[j]; species[j] = t;
+  }
+  const index = spec.map((s) => s.bins.map((b) => indexBin(b, meta.cell)));
+  const track = new Float32Array(n * BINS * 2);
+  for (let i = 0; i < n; i++) {
+    const u = rand(), v = rand();
+    const jx = rand() + rand() - 1, jy = rand() + rand() - 1;
+    const ix = index[species[i]];
+    for (let b = 0; b < BINS; b++) {
+      const at = (i * BINS + b) * 2;
+      sampleInto(ix[b], u, v, track, at);
+      settle(track, at, jx, jy, rand, land);
+    }
+  }
+  holdSettledFlocks(track, species, spec.length);
+  return { n, species, track, counts };
+}
+
+/* ---------- Where the action is ---------- */
+
+const NEIGHBOURS = [1, 4, 6, 4, 1];
+function smoothCircular(a, passes = 1) {
+  let cur = a;
+  for (let p = 0; p < passes; p++) {
+    cur = cur.map((_, i) => NEIGHBOURS.reduce((s, w, k) => s + w * cur[(i + k - 2 + BINS) % BINS], 0) / 16);
+  }
+  return cur;
+}
+
+function quantile(sorted, q) { return sorted[Math.floor(q * (sorted.length - 1))]; }
+
+function analyse(t, framed) {
+  const step = 3, count = Math.floor(t.n / step);
+  // Species outside the camera's core flock would pull the view wider and pack every dot closer together.
+  const sample = [];
+  for (let k = 0; k < count; k++) if (framed[t.species[k * step]]) sample.push(k * step);
+  const lat = [], lon = [], halfLat = [], halfLon = [], drift = [], travel = [], meanLat = [];
+  for (let b = 0; b < BINS; b++) {
+    const b2 = (b + 1) % BINS;
+    let sw = 0, sLat = 0, sLon = 0, dLat = 0, dAbs = 0, all = 0;
+    const lats = new Float32Array(sample.length), lons = new Float32Array(sample.length);
+    for (let k = 0; k < sample.length; k++) {
+      const i = sample[k];
+      const x = t.track[(i * BINS + b) * 2], y = t.track[(i * BINS + b) * 2 + 1];
+      const d = t.track[(i * BINS + b2) * 2 + 1] - y;
+      const w = 0.25 + Math.min(Math.abs(d) / 6, 1);
+      sw += w; sLat += w * y; sLon += w * x;
+      dLat += d; dAbs += Math.abs(d); all += y;
+      lats[k] = y; lons[k] = x;
+    }
+    lats.sort(); lons.sort();
+    lat.push(sLat / sw);
+    lon.push(sLon / sw);
+    meanLat.push(all / sample.length);
+    drift.push(dLat / sample.length);
+    travel.push(dAbs / sample.length);
+    halfLat.push(Math.max(quantile(lats, 0.93) - lat[b], lat[b] - quantile(lats, 0.07)));
+    halfLon.push(Math.max(quantile(lons, 0.93) - lon[b], lon[b] - quantile(lons, 0.07)));
+  }
+  const peak = Math.max(...drift.map(Math.abs));
+  const places = PLACES.map(([name, pLat, pLon]) => {
+    const coslat = Math.cos(pLat * Math.PI / 180);
+    const score = [];
+    for (let b = 0; b < BINS; b++) {
+      let c = 0;
+      for (let k = 0; k < count; k++) {
+        const o = (k * step * BINS + b) * 2;
+        const dy = t.track[o + 1] - pLat, dx = wrapLongitude(t.track[o] - pLon) * coslat;
+        if (dy * dy + dx * dx < 16) c++;
+      }
+      score.push(c / count);
+    }
+    return { name, lat: pLat, lon: pLon, score: smoothCircular(score), el: null, shown: 0 };
+  });
+  return {
+    lat: smoothCircular(lat, 3), lon: smoothCircular(lon, 3),
+    halfLat: smoothCircular(halfLat, 3), halfLon: smoothCircular(halfLon, 3),
+    meanLat, drift: smoothCircular(drift).map((d) => d / peak), places,
+  };
+}
+
+// Periodic uniform cubic B-spline through half-month keys; t = 0..1 across the year.
+function spline(a, t) {
+  const s = t * BINS - 0.5 + BINS, k = Math.floor(s), f = s - k;
+  const p = (o) => a[(k + o + BINS * 2) % BINS];
+  const f2 = f * f, f3 = f2 * f;
+  return ((1 - 3 * f + 3 * f2 - f3) * p(-1) + (4 - 6 * f2 + 3 * f3) * p(0) + (1 + 3 * f + 3 * f2 - 3 * f3) * p(1) + f3 * p(2)) / 6;
+}
+
+/* ---------- GL ---------- */
+
+const QUAD_VS = `#version 300 es
+void main() {
+  vec2 p = vec2((gl_VertexID << 1) & 2, gl_VertexID & 2);
+  gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0);
+}`;
+
+const GLOBE_FS = `#version 300 es
+precision highp float;
+uniform sampler2D uNight, uLand;
+uniform mat3 uR;
+uniform vec2 uCenter;
+uniform float uRadius, uPxRatio;
+out vec4 frag;
+const float PI = 3.14159265;
+void main() {
+  vec2 q = (gl_FragCoord.xy - uCenter) / uRadius;
+  float d2 = dot(q, q);
+  float d = sqrt(d2);
+  float edge = 1.0 / uRadius;
+  // Thin atmosphere outside the disc.
+  vec3 halo = vec3(0.16, 0.28, 0.5) * pow(max(0.0, 1.0 - (d - 1.0) * 22.0), 3.0) * 0.5;
+  if (d2 >= 1.0) { frag = vec4(d < 1.05 ? halo : vec3(0.0), 1.0); return; }
+  vec3 n = vec3(q, sqrt(1.0 - d2));
+  vec3 e = transpose(uR) * n;
+  vec2 uv = vec2(atan(e.x, e.z) / (2.0 * PI) + 0.5, 0.5 - asin(clamp(e.y, -1.0, 1.0)) / PI);
+  float lod = max(0.0, log2(4096.0 / (2.0 * PI * uRadius * max(n.z, 0.25))));
+  vec3 night = textureLod(uNight, uv, lod).rgb;
+  float land = textureLod(uLand, uv, lod).r;
+  // City lights are warm and the moonlit surface is blue, so red minus blue isolates the lights.
+  float lights = max(0.0, night.r - night.b * 0.92);
+  float relief = smoothstep(0.02, 0.32, night.b);
+  vec3 ground = mix(vec3(0.072, 0.053, 0.036), vec3(0.22, 0.17, 0.12), relief);
+  vec3 sea = vec3(0.004, 0.009, 0.019);
+  vec3 c = mix(sea, ground, land);
+  c += vec3(1.0, 0.70, 0.36) * pow(lights, 1.15) * 2.6;
+  c *= 0.5 + 0.5 * pow(n.z, 0.6);
+  c += vec3(0.10, 0.18, 0.34) * pow(1.0 - n.z, 4.0) * 0.55;
+  c = mix(c, halo, smoothstep(1.0 - edge * 1.5, 1.0, d));
+  frag = vec4(c, 1.0);
+}`;
+
+const LINE_VS = `#version 300 es
+in vec3 aPos;
+uniform mat3 uR;
+uniform vec2 uScale;
+out float vZ;
+void main() {
+  vec3 p = uR * aPos;
+  vZ = p.z;
+  gl_Position = vec4(p.xy * uScale, 0.0, 1.0);
+}`;
+const LINE_FS = `#version 300 es
+precision mediump float;
+in float vZ;
+uniform float uAlpha;
+out vec4 frag;
+void main() {
+  if (vZ < 0.0) discard;
+  float a = uAlpha * smoothstep(0.0, 0.3, vZ);
+  frag = vec4(vec3(0.95, 0.88, 0.76) * a, a);
+}`;
+
+const TRACK_GLSL = `
+uniform highp sampler2D uTrack;
+uniform float uBin, uClock;
+const int BINS = ${BINS};
+const int TEX_W = ${TEX_W};
+vec2 key(int i, int k) {
+  int n = i * BINS + (k + BINS * 2) % BINS;
+  return texelFetch(uTrack, ivec2(n % TEX_W, n / TEX_W), 0).rg;
+}
+float hash(float x) { return fract(sin(x * 12.9898) * 43758.5453); }
+// A smooth curve through the half-month stopovers, so flocks flow and swell as blobs instead of hopping in step.
+vec2 trackAt(int i, float s) {
+  float k0 = floor(s), f = s - k0;
+  int k = int(k0);
+  float f2 = f * f, f3 = f2 * f;
+  return ((1.0 - 3.0 * f + 3.0 * f2 - f3) * key(i, k - 1) + (4.0 - 6.0 * f2 + 3.0 * f3) * key(i, k)
+    + (1.0 + 3.0 * f + 3.0 * f2 - 3.0 * f3) * key(i, k + 1) + f3 * key(i, k + 2)) / 6.0;
+}
+vec3 toSphere(vec2 ll) {
+  vec2 r = radians(ll);
+  float c = cos(r.y);
+  return vec3(c * sin(r.x), sin(r.y), c * cos(r.x));
+}
+// Each dot keeps its own departure date, plus a small drift that keeps resting birds alive without carrying them
+// off the shore.
+void particle(int i, float back, out vec3 pos, out float travelled) {
+  float id = float(i);
+  float phase = (hash(id + 0.17) - 0.5) * 1.5;
+  vec2 ll = trackAt(i, uBin + float(BINS) + phase - back);
+  vec2 off = vec2(sin(uClock * 0.7 + id), cos(uClock * 0.53 + id * 1.7)) * 0.03;
+  off.x /= max(0.2, cos(radians(ll.y)));
+  pos = toSphere(ll + off);
+  travelled = 0.0;
+}`;
+
+const DOT_VS = `#version 300 es
+in float aSpecies;
+uniform mat3 uR;
+uniform vec2 uScale;
+uniform float uSize;
+uniform float uOn[${MAX_SPECIES}];
+uniform vec3 uCol[${MAX_SPECIES}];
+out vec4 vC;
+${TRACK_GLSL}
+void main() {
+  vec3 p; float t;
+  particle(gl_VertexID, 0.0, p, t);
+  p = uR * p;
+  int sp = int(aSpecies);
+  gl_Position = vec4(p.xy * uScale, p.z > 0.0 ? 0.0 : 2.0, 1.0);
+  gl_PointSize = uSize;
+  vC = vec4(uCol[sp], uOn[sp] * smoothstep(0.0, 0.18, p.z));
+}`;
+const DOT_FS = `#version 300 es
+precision mediump float;
+in vec4 vC;
+out vec4 frag;
+void main() {
+  float d = length(gl_PointCoord - 0.5) * 2.0;
+  float a = vC.a * smoothstep(1.0, 0.55, d);
+  if (a < 0.01) discard;
+  frag = vec4(vC.rgb * a, a);
+}`;
+
+const TRAIL_VS = `#version 300 es
+in float aSpecies;
+uniform mat3 uR;
+uniform vec2 uScale;
+uniform float uOn[${MAX_SPECIES}];
+uniform vec3 uCol[${MAX_SPECIES}];
+out vec4 vC;
+${TRACK_GLSL}
+void main() {
+  const float TRAIL_BINS = 0.05;
+  int i = gl_InstanceID;
+  vec3 head, tail; float t;
+  particle(i, 0.0, head, t);
+  particle(i, TRAIL_BINS, tail, t);
+  // Resting birds have no trail; fast ones draw a streak that fades towards the tail.
+  float len = degrees(acos(clamp(dot(head, tail), -1.0, 1.0)));
+  float moving = smoothstep(0.4, 2.5, len) * (1.0 - smoothstep(10.0, 16.0, len));
+  vec3 p = uR * (gl_VertexID == 0 ? head : tail);
+  int sp = int(aSpecies);
+  gl_Position = vec4(p.xy * uScale, (p.z > 0.0 && moving > 0.0) ? 0.0 : 2.0, 1.0);
+  vC = vec4(uCol[sp], (gl_VertexID == 0 ? 0.2 : 0.0) * moving * uOn[sp] * smoothstep(0.0, 0.18, p.z));
+}`;
+const TRAIL_FS = `#version 300 es
+precision mediump float;
+in vec4 vC;
+out vec4 frag;
+void main() { frag = vec4(vC.rgb * vC.a, vC.a); }`;
+
+function program(gl, vs, fs) {
+  const p = gl.createProgram();
+  for (const [type, src] of [[gl.VERTEX_SHADER, vs], [gl.FRAGMENT_SHADER, fs]]) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+    gl.attachShader(p, s);
+  }
+  gl.linkProgram(p);
+  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+  const u = {};
+  const count = gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS);
+  for (let i = 0; i < count; i++) {
+    const name = gl.getActiveUniform(p, i).name.replace("[0]", "");
+    u[name] = gl.getUniformLocation(p, name);
+  }
+  return { p, u };
+}
+
+function imageTexture(gl, img, internal, format, unit) {
+  const tex = gl.createTexture();
+  gl.activeTexture(gl.TEXTURE0 + unit);
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texImage2D(gl.TEXTURE_2D, 0, internal, format, gl.UNSIGNED_BYTE, img);
+  gl.generateMipmap(gl.TEXTURE_2D);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  return tex;
+}
+
+function borderVertices(lines) {
+  const out = [];
+  const xyz = (lon, lat) => {
+    const a = lon * Math.PI / 180, b = lat * Math.PI / 180, c = Math.cos(b);
+    return [c * Math.sin(a), Math.sin(b), c * Math.cos(a)];
+  };
+  for (const l of lines) {
+    for (let i = 2; i < l.length; i += 2) out.push(...xyz(l[i - 2], l[i - 1]), ...xyz(l[i], l[i + 1]));
+  }
+  return new Float32Array(out);
+}
+
+function cameraMatrix(latDeg, lonDeg) {
+  const a = lonDeg * Math.PI / 180, b = latDeg * Math.PI / 180;
+  const cl = Math.cos(a), sl = Math.sin(a), cp = Math.cos(b), sp = Math.sin(b);
+  // Column-major: spin the focus longitude to face the viewer, then tilt the focus latitude to centre.
+  return new Float32Array([cl, -sl * sp, sl * cp, 0, cp, sp, -sl, -cl * sp, cl * cp]);
+}
+
+function apply3(m, v) {
+  return [m[0] * v[0] + m[3] * v[1] + m[6] * v[2], m[1] * v[0] + m[4] * v[1] + m[7] * v[2], m[2] * v[0] + m[5] * v[1] + m[8] * v[2]];
+}
+
+/* ---------- Dial ---------- */
+
+function buildDial() {
+  const g = $("months");
+  const ns = "http://www.w3.org/2000/svg";
+  let day = 0;
+  MONTH_DAYS.forEach((n, m) => {
+    const mid = (day + n / 2) / 365 * 2 * Math.PI;
+    const t = document.createElementNS(ns, "text");
+    t.setAttribute("x", 74 + 66 * Math.sin(mid));
+    t.setAttribute("y", 74 - 66 * Math.cos(mid));
+    t.textContent = MONTHS[m][0];
+    g.append(t);
+    const a = day / 365 * 2 * Math.PI;
+    const tick = document.createElementNS(ns, "line");
+    tick.setAttribute("x1", 74 + 50 * Math.sin(a));
+    tick.setAttribute("y1", 74 - 50 * Math.cos(a));
+    tick.setAttribute("x2", 74 + 56 * Math.sin(a));
+    tick.setAttribute("y2", 74 - 56 * Math.cos(a));
+    tick.setAttribute("stroke", "#000");
+    tick.setAttribute("stroke-width", "1.5");
+    g.append(tick);
+    day += n;
+  });
+}
+
+function dateOf(t) {
+  let day = Math.floor(t * 365) % 365;
+  for (let m = 0; m < 12; m++) {
+    if (day < MONTH_DAYS[m]) return `${MONTHS[m]} ${day + 1}`;
+    day -= MONTH_DAYS[m];
+  }
+  return "Dec 31";
+}
+
+function updateDial(t, stage) {
+  const a = t * 2 * Math.PI;
+  const r = 53;
+  const x = 74 + r * Math.sin(a), y = 74 - r * Math.cos(a);
+  $("arc").setAttribute("d", `M 74 ${74 - r} A ${r} ${r} 0 ${t > 0.5 ? 1 : 0} 1 ${x.toFixed(2)} ${y.toFixed(2)}`);
+  const date = dateOf(t);
+  $("date").textContent = date;
+  $("stage").textContent = stage;
+  const dial = $("dial");
+  dial.setAttribute("aria-valuenow", Math.floor(t * 365));
+  dial.setAttribute("aria-valuetext", `${date}, ${stage}`);
+}
+
+/* ---------- Main ---------- */
+
+async function main() {
+  const loadJson = (src) => fetch(src).then((r) => {
+    if (!r.ok) throw new Error(`Could not load ${src}.`);
+    return r.json();
+  });
+  let speciesInfo = {};
+  if (ASIA) {
+    const [config, info] = await Promise.all([loadJson("data/east-asia-config.json"), loadJson("data/east-asia-species-info.json")]);
+    speciesInfo = info;
+    COLORS = config.colors;
+    PLACES = config.places;
+    document.body.classList.add("asia");
+    document.title = config.title;
+    document.querySelector('meta[name="description"]').content = config.description;
+    $("title").querySelector("h1").textContent = config.title;
+    $("globe").setAttribute("aria-label", config.description);
+    $("legend").querySelector("h2").textContent = "12 species · a year of migration";
+    $("edition").textContent = "Americas edition ↗";
+    $("edition").href = "?region=americas";
+    $("notes").replaceChildren();
+    const note = document.createElement("p");
+    note.textContent = "Select a bird to see where it breeds and winters. Equal dots per species; dots do not show population size.";
+    const fine = document.createElement("p");
+    fine.className = "fine";
+    fine.textContent = "Seasonal ranges from eBird/GBIF and species accounts; shorebird breeding ranges supplemented where sightings are sparse. Flights are inferred. NASA · Natural Earth. ";
+    const sources = document.createElement("a");
+    sources.href = "data/east-asia-sources.md";
+    sources.textContent = "Sources & method";
+    sources.target = "_blank";
+    sources.rel = "noopener";
+    fine.append(sources);
+    $("notes").append(note, fine);
+  } else {
+    document.title = "Migration Across the Americas";
+    $("title").querySelector("h1").textContent = document.title;
+    document.querySelector('meta[name="description"]').content = "A year of bird migration across the Americas, simulated from eBird reports. The view follows the birds.";
+    $("globe").setAttribute("aria-label", "Animated globe of the Americas with coloured dots for migrating birds");
+  }
+  const canvas = $("globe");
+  const gl = canvas.getContext("webgl2", { antialias: true, alpha: false, powerPreference: "high-performance" });
+  if (!gl) throw new Error("This map needs WebGL 2, which this browser does not offer.");
+
+  const loadImage = (src) => new Promise((ok, no) => {
+    const i = new Image();
+    i.onload = () => ok(i);
+    i.onerror = () => no(new Error(`Could not load ${src}. Serve this folder over http rather than opening the file directly.`));
+    i.src = src;
+  });
+  const prefix = ASIA ? "data/east-asia-" : "data/";
+  const [meta, borders, shores, night, land] = await Promise.all([
+    loadJson(`${prefix}birds.json`), loadJson(`${prefix}borders.json`), loadJson(`${prefix}shores.json`), loadImage("assets/earth-night.jpg"), loadImage("assets/land.png"),
+  ]);
+
+  const tracks = buildTracks(meta, landGrid(land));
+  const flow = analyse(tracks, meta.species.map((s) => s.camera !== false));
+
+  /* Legend */
+  const list = $("species");
+  const on = new Float32Array(MAX_SPECIES).fill(1), target = new Float32Array(MAX_SPECIES).fill(1);
+  let isolated = -1, hovered = -1;
+  function showRoute() {
+    const route = $("route");
+    const info = isolated >= 0 ? speciesInfo[meta.species[isolated].name] : null;
+    route.hidden = !info;
+    route.replaceChildren();
+    if (!info) return;
+    const title = document.createElement("strong");
+    title.textContent = meta.species[isolated].name;
+    route.append(title);
+    for (const [label, value] of [["Breeds", info.breeding], ["Winters", info.wintering], ["Via", info.via]]) {
+      const p = document.createElement("p");
+      p.textContent = `${label}: ${value}`;
+      route.append(p);
+    }
+    if (meta.species[isolated].seasonalPrior) {
+      const p = document.createElement("p");
+      p.textContent = "Summer range supplemented from species accounts because Siberian sightings are sparse.";
+      route.append(p);
+    }
+    const foot = document.createElement("small");
+    const a = document.createElement("a");
+    a.href = info.source.url; a.textContent = info.source.title; a.target = "_blank"; a.rel = "noopener";
+    foot.append(a, document.createTextNode(" · Broad seasonal ranges; dots are simulated."));
+    route.append(foot);
+  }
+  const refreshTargets = () => {
+    const pick = hovered >= 0 ? hovered : isolated;
+    meta.species.forEach((_, i) => { target[i] = pick < 0 || pick === i ? 1 : 0.05; });
+    list.classList.toggle("isolating", isolated >= 0);
+    [...list.querySelectorAll(".sp")].forEach((b, i) => b.setAttribute("aria-pressed", String(isolated === i)));
+  };
+  meta.species.forEach((s, i) => {
+    const li = document.createElement("li");
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "sp";
+    b.title = ASIA ? `${s.scientific}. Select for breeding and wintering destinations.` : `${s.scientific}. Population: ${s.source}. ${tracks.counts[i].toLocaleString("en-US")} dots.`;
+    b.setAttribute("aria-pressed", "false");
+    const swatch = document.createElement("i");
+    swatch.style.background = COLORS[s.name];
+    const name = document.createElement("span");
+    name.textContent = s.name;
+    const pop = document.createElement("b");
+    pop.textContent = formatCount(s.population);
+    b.append(swatch, name, pop);
+    b.addEventListener("click", () => { isolated = isolated === i ? -1 : i; refreshTargets(); showRoute(); });
+    b.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { hovered = i; refreshTargets(); } });
+    b.addEventListener("pointerleave", () => { hovered = -1; refreshTargets(); });
+    li.append(b);
+    list.append(li);
+  });
+
+  /* Place labels */
+  const labelHost = $("labels");
+  for (const p of flow.places) {
+    p.el = document.createElement("div");
+    p.el.className = "place";
+    p.el.textContent = p.name;
+    p.el.style.opacity = 0;
+    labelHost.append(p.el);
+  }
+
+  /* GPU data */
+  const globeProg = program(gl, QUAD_VS, GLOBE_FS);
+  const lineProg = program(gl, LINE_VS, LINE_FS);
+  const dotProg = program(gl, DOT_VS, DOT_FS);
+  const trailProg = program(gl, TRAIL_VS, TRAIL_FS);
+  imageTexture(gl, night, gl.RGBA8, gl.RGBA, 0);
+  imageTexture(gl, land, gl.R8, gl.RED, 1);
+
+  const texels = tracks.n * BINS;
+  const texH = Math.ceil(texels / TEX_W);
+  const texData = new Float32Array(TEX_W * texH * 2);
+  texData.set(tracks.track);
+  gl.activeTexture(gl.TEXTURE2);
+  gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RG32F, TEX_W, texH, 0, gl.RG, gl.FLOAT, texData);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+  const emptyVao = gl.createVertexArray();
+  const speciesBuf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, speciesBuf);
+  gl.bufferData(gl.ARRAY_BUFFER, tracks.species, gl.STATIC_DRAW);
+  const speciesVao = (prog, divisor) => {
+    const vao = gl.createVertexArray();
+    gl.bindVertexArray(vao);
+    gl.bindBuffer(gl.ARRAY_BUFFER, speciesBuf);
+    const loc = gl.getAttribLocation(prog.p, "aSpecies");
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 1, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribDivisor(loc, divisor);
+    return vao;
+  };
+  const dotVao = speciesVao(dotProg, 0);
+  const trailVao = speciesVao(trailProg, 1);
+
+  const lineLoc = gl.getAttribLocation(lineProg.p, "aPos");
+  const lineSet = (lines) => {
+    const data = borderVertices(lines);
+    const vao = gl.createVertexArray();
+    gl.bindVertexArray(vao);
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(lineLoc);
+    gl.vertexAttribPointer(lineLoc, 3, gl.FLOAT, false, 0, 0);
+    return { vao, count: data.length / 3 };
+  };
+  const borderLines = lineSet(borders), shoreLines = lineSet(shores);
+
+  const colors = new Float32Array(MAX_SPECIES * 3);
+  meta.species.forEach((s, i) => colors.set(hexRgb(COLORS[s.name]), i * 3));
+  gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
+  /* Time */
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let seconds = 0.30 * YEAR_SECONDS, playing = !reduced, lastNow = 0, clock = 0, exporting = false;
+  const setPlaying = (p) => { playing = p; $("play").textContent = p ? "Pause" : "Play"; };
+  setPlaying(playing);
+  $("play").addEventListener("click", () => setPlaying(!playing));
+  addEventListener("keydown", (e) => {
+    if (e.code === "Space" && e.target.tagName !== "BUTTON") { e.preventDefault(); setPlaying(!playing); }
+  });
+
+  /* Dial scrubbing */
+  buildDial();
+  const dial = $("dial");
+  let scrubbing = false;
+  const scrubTo = (e) => {
+    const b = dial.getBoundingClientRect();
+    const a = Math.atan2(e.clientX - b.left - b.width / 2, -(e.clientY - b.top - b.height / 2));
+    seconds = ((a / (2 * Math.PI)) + 1) % 1 * YEAR_SECONDS;
+  };
+  dial.addEventListener("pointerdown", (e) => { scrubbing = true; dial.setPointerCapture(e.pointerId); scrubTo(e); });
+  dial.addEventListener("pointermove", (e) => { if (scrubbing) scrubTo(e); });
+  dial.addEventListener("pointerup", () => { scrubbing = false; });
+  dial.addEventListener("keydown", (e) => {
+    const step = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1, PageUp: 15, PageDown: -15 }[e.key];
+    if (step) { e.preventDefault(); seconds += step / 365 * YEAR_SECONDS; }
+  });
+
+  function stageAt(time) {
+    const d = spline(flow.drift, time);
+    if (d > 0.3) return "Northbound";
+    if (d < -0.3) return "Southbound";
+    if (ASIA) return time >= 0.38 && time < 0.62 ? "Breeding season" : time < 0.22 || time >= 0.84 ? "Wintering season" : "Migration season";
+    return spline(flow.meanLat, time) > 15 ? "Summer grounds" : "Winter grounds";
+  }
+
+  const measure = document.createElement("canvas").getContext("2d");
+
+  function layoutLabels(R, radius, view, time) {
+    const { W, H, dt, blocked } = view;
+    const css = radius / view.dpr;
+    const active = [];
+    measure.font = LABEL_FONT;
+    for (const p of flow.places) {
+      const score = spline(p.score, time);
+      const peak = Math.max(...p.score);
+      // Peak share must be meaningful, and the place only names itself near its own busiest weeks.
+      const want = peak > 0.012 ? smoothstep(0.45, 0.7, score / peak) : 0;
+      const a = p.lat * Math.PI / 180, b = p.lon * Math.PI / 180;
+      const v = apply3(R, [Math.cos(a) * Math.sin(b), Math.sin(a), Math.cos(a) * Math.cos(b)]);
+      p.x = W / 2 + v[0] * css;
+      p.y = H / 2 - v[1] * css;
+      const inView = v[2] > 0.2 && p.x > 8 && p.x < W - 60 && p.y > 8 && p.y < H - 8;
+      active.push({ p, want: inView ? want : 0, score });
+    }
+    active.sort((a, b) => b.score - a.score);
+    const placed = [];
+    const hits = (box, list) => list.some((o) => box[0] < o[2] && box[2] > o[0] && box[1] < o[3] && box[3] > o[1]);
+    const ease = 1 - Math.exp(-dt * 6);
+    for (const c of active) {
+      // Place names describe all birds together, so they step aside while one species is isolated.
+      let show = isolated >= 0 ? 0 : c.want;
+      const box = [c.p.x - 4, c.p.y - 10, c.p.x + measure.measureText(c.p.name).width + 16, c.p.y + 10];
+      if (show > 0.02 && (hits(box, placed) || hits(box, blocked))) show = 0;
+      if (show > 0.02 && placed.length >= 6) show = 0;
+      if (show > 0.02) placed.push(box);
+      c.p.shown += (show - c.p.shown) * ease;
+    }
+  }
+
+  function showLabelsOnPage() {
+    for (const p of flow.places) {
+      p.el.style.opacity = p.shown.toFixed(3);
+      if (p.shown > 0.005) p.el.style.transform = `translate(${(p.x - 3).toFixed(1)}px, ${(p.y - 10).toFixed(1)}px)`;
+    }
+  }
+
+  // The one renderer: live playback and video export both draw a moment of the year through this.
+  function renderAt(time, view) {
+    const t = (((time / YEAR_SECONDS) % 1) + 1) % 1;
+    const pw = Math.round(view.W * view.dpr), ph = Math.round(view.H * view.dpr);
+    if (canvas.width !== pw || canvas.height !== ph) { canvas.width = pw; canvas.height = ph; }
+
+    /* Camera follows the action and frames the flock */
+    const focusLat = spline(flow.lat, t), focusLon = spline(flow.lon, t);
+    const halfLat = clamp(spline(flow.halfLat, t) + 7, 24, 80);
+    const halfLon = clamp(spline(flow.halfLon, t) + 4, 20, 80);
+    const byH = 0.5 * ph * 0.94 / Math.sin(halfLat * Math.PI / 180);
+    const byW = 0.5 * pw * 1.05 / Math.sin(halfLon * Math.PI / 180 * Math.cos(focusLat * Math.PI / 180));
+    const radius = Math.min(byH, byW);
+    const R = cameraMatrix(focusLat, focusLon);
+    const scale = [2 * radius / pw, 2 * radius / ph];
+    const bin = t * BINS - 0.5;
+
+    gl.viewport(0, 0, pw, ph);
+    gl.clearColor(0, 0, 0, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.disable(gl.BLEND);
+
+    gl.useProgram(globeProg.p);
+    gl.bindVertexArray(emptyVao);
+    gl.uniform1i(globeProg.u.uNight, 0);
+    gl.uniform1i(globeProg.u.uLand, 1);
+    gl.uniformMatrix3fv(globeProg.u.uR, false, R);
+    gl.uniform2f(globeProg.u.uCenter, pw / 2, ph / 2);
+    gl.uniform1f(globeProg.u.uRadius, radius);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+    gl.enable(gl.BLEND);
+    const drawLines = (set, alpha) => {
+      gl.useProgram(lineProg.p);
+      gl.bindVertexArray(set.vao);
+      gl.uniformMatrix3fv(lineProg.u.uR, false, R);
+      gl.uniform2f(lineProg.u.uScale, scale[0], scale[1]);
+      gl.uniform1f(lineProg.u.uAlpha, alpha);
+      gl.drawArrays(gl.LINES, 0, set.count);
+    };
+    drawLines(borderLines, 0.16);
+
+    const shared = (prog) => {
+      gl.useProgram(prog.p);
+      gl.uniform1i(prog.u.uTrack, 2);
+      gl.uniform1f(prog.u.uBin, bin);
+      gl.uniform1f(prog.u.uClock, view.clock);
+      gl.uniformMatrix3fv(prog.u.uR, false, R);
+      gl.uniform2f(prog.u.uScale, scale[0], scale[1]);
+      gl.uniform1fv(prog.u.uOn, on);
+      gl.uniform3fv(prog.u.uCol, colors);
+    };
+    shared(trailProg);
+    gl.bindVertexArray(trailVao);
+    // Dots are shuffled, so the first share of them is a fair sample to draw trails for.
+    gl.drawArraysInstanced(gl.LINES, 0, 2, Math.floor(tracks.n * 0.15));
+
+    shared(dotProg);
+    // Small screens fit the same flocks into less room, so dots shrink with them to leave the land visible.
+    const roomy = clamp(Math.sqrt(Math.min(view.W, view.H) / 750), 0.6, 1);
+    gl.uniform1f(dotProg.u.uSize, Math.max(1, clamp(0.75 + radius / ph * 0.7, 1.1, 2.2) * view.dpr * roomy));
+    gl.bindVertexArray(dotVao);
+    gl.drawArrays(gl.POINTS, 0, tracks.n);
+
+    // Shorelines go on top so a dense flock never hides them.
+    drawLines(shoreLines, 0.34);
+
+    layoutLabels(R, radius, view, t);
+    return t;
+  }
+
+  function frame(now) {
+    requestAnimationFrame(frame);
+    const dt = Math.min(0.1, (now - lastNow) / 1000);
+    lastNow = now;
+    if (exporting) return;
+    clock += dt;
+    if (playing && !scrubbing) seconds += dt;
+    for (let i = 0; i < on.length; i++) on[i] += (target[i] - on[i]) * Math.min(1, dt * 8);
+    // Labels stay clear of the title, legend and dial.
+    const blocked = ["title", "legend", "clock", "route"].map((id) => {
+      const r = $(id).getBoundingClientRect();
+      return [r.left - 6, r.top - 6, r.right + 6, r.bottom + 6];
+    });
+    const t = renderAt(seconds, { W: innerWidth, H: innerHeight, dpr: Math.min(devicePixelRatio || 1, 2), dt, clock, blocked });
+    showLabelsOnPage();
+    updateDial(t, stageAt(t));
+  }
+
+  /* ---------- Video export ----------
+     Page text is HTML and is not part of the canvas, so each video frame copies the globe to a second canvas
+     and paints the title, legend, dial and place names over it. Layout is in CSS pixels at 540 wide. */
+
+  function wrapText(ctx, text, maxWidth) {
+    const lines = [];
+    let line = "";
+    for (const word of text.trim().split(/\s+/)) {
+      const next = line ? `${line} ${word}` : word;
+      if (ctx.measureText(next).width > maxWidth && line) { lines.push(line); line = word; } else line = next;
+    }
+    lines.push(line);
+    return lines;
+  }
+
+  function videoLayout(W, H) {
+    const gutter = 28, width = W - gutter * 2;
+    measure.font = "400 13px Jost, sans-serif";
+    const note = wrapText(measure, document.querySelector("#notes p").textContent, width);
+    measure.font = "400 11px Jost, sans-serif";
+    const fine = wrapText(measure, document.querySelector("#notes .fine").textContent, width);
+    const fineTop = H - 22 - fine.length * 14;
+    const noteTop = fineTop - note.length * 17 - 3;
+    const rowH = 19, rowsTop = noteTop - 10 - rowH * meta.species.length;
+    const dial = { size: 136, x: W - gutter - 68, y: noteTop - 14 - 68 };
+    let legendRight = gutter;
+    for (const s of meta.species) {
+      measure.font = LABEL_FONT;
+      const nameW = measure.measureText(s.name).width;
+      measure.font = COUNT_FONT;
+      legendRight = Math.max(legendRight, gutter + 19 + nameW + (ASIA ? 0 : 8 + measure.measureText(formatCount(s.population)).width));
+    }
+    const headingY = rowsTop - 16;
+    return {
+      gutter, width, note, fine, fineTop, noteTop, rowH, rowsTop, headingY, dial,
+      blocked: [
+        [0, 18, W, 66], [0, headingY - 14, legendRight + 8, H], [0, noteTop - 6, W, H],
+        [dial.x - 74, dial.y - 74, dial.x + 74, dial.y + 74],
+      ],
+    };
+  }
+
+  function drawDial(ctx, d, t) {
+    ctx.save();
+    ctx.translate(d.x, d.y);
+    ctx.scale(d.size / 148, d.size / 148);
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "rgba(0,0,0,.72)";
+    ctx.beginPath(); ctx.arc(0, 0, 58, 0, Math.PI * 2); ctx.fill();
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = "rgba(243,239,230,.2)";
+    ctx.beginPath(); ctx.arc(0, 0, 53, 0, Math.PI * 2); ctx.stroke();
+    ctx.strokeStyle = INK;
+    ctx.beginPath(); ctx.arc(0, 0, 53, -Math.PI / 2, -Math.PI / 2 + t * Math.PI * 2); ctx.stroke();
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = "400 11px Jost, sans-serif";
+    ctx.fillStyle = INK_SOFT;
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 1.5;
+    let day = 0;
+    MONTH_DAYS.forEach((n, m) => {
+      const mid = (day + n / 2) / 365 * Math.PI * 2, a = day / 365 * Math.PI * 2;
+      ctx.fillText(MONTHS[m][0], 66 * Math.sin(mid), -66 * Math.cos(mid));
+      ctx.beginPath();
+      ctx.moveTo(50 * Math.sin(a), -50 * Math.cos(a));
+      ctx.lineTo(56 * Math.sin(a), -56 * Math.cos(a));
+      ctx.stroke();
+      day += n;
+    });
+    ctx.fillStyle = INK;
+    ctx.font = "500 21px Jost, sans-serif";
+    ctx.fillText(dateOf(t), 0, -6);
+    ctx.fillStyle = INK_SOFT;
+    ctx.font = "400 10.5px Jost, sans-serif";
+    ctx.fillText(stageAt(t), 0, 16);
+    ctx.restore();
+  }
+
+  function drawVideoOverlay(ctx, layout, t, dpr) {
+    const { gutter } = layout;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.shadowBlur = 0;
+    ctx.drawImage(canvas, 0, 0);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.shadowColor = "#000";
+    ctx.shadowBlur = 5 * dpr;
+
+    for (const p of flow.places) {
+      if (p.shown <= 0.005) continue;
+      ctx.globalAlpha = p.shown;
+      ctx.fillStyle = INK;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, Math.PI * 2); ctx.fill();
+      ctx.font = LABEL_FONT;
+      ctx.fillText(p.name, p.x + 9, p.y);
+    }
+    ctx.globalAlpha = 1;
+
+    ctx.fillStyle = INK;
+    const title = $("title").querySelector("h1").textContent.trim();
+    let titleSize = 28;
+    do { ctx.font = `500 ${titleSize--}px Jost, sans-serif`; } while (ctx.measureText(title).width > layout.width && titleSize > 14);
+    ctx.fillText(title, gutter, 42);
+    ctx.font = "600 13px Jost, sans-serif";
+    ctx.letterSpacing = "1px";
+    ctx.fillText($("legend").querySelector("h2").textContent.toUpperCase(), gutter, layout.headingY);
+    ctx.letterSpacing = "0px";
+
+    meta.species.forEach((s, i) => {
+      const y = layout.rowsTop + layout.rowH * (i + 0.5);
+      ctx.fillStyle = COLORS[s.name];
+      ctx.fillRect(gutter, y - 5.5, 11, 11);
+      ctx.fillStyle = INK;
+      ctx.font = LABEL_FONT;
+      ctx.fillText(s.name, gutter + 19, y);
+      const nameW = ctx.measureText(s.name).width;
+      ctx.fillStyle = INK_SOFT;
+      ctx.font = COUNT_FONT;
+      if (!ASIA) ctx.fillText(formatCount(s.population), gutter + 19 + nameW + 8, y);
+    });
+
+    ctx.fillStyle = INK_SOFT;
+    ctx.font = "400 13px Jost, sans-serif";
+    layout.note.forEach((l, i) => ctx.fillText(l, gutter, layout.noteTop + 8 + i * 17));
+    ctx.fillStyle = INK_FAINT;
+    ctx.font = "400 11px Jost, sans-serif";
+    layout.fine.forEach((l, i) => ctx.fillText(l, gutter, layout.fineTop + 7 + i * 14));
+
+    drawDial(ctx, layout.dial, t);
+  }
+
+  function loadScript(src) {
+    return new Promise((ok, no) => {
+      const el = document.createElement("script");
+      el.src = src;
+      el.onload = ok;
+      el.onerror = () => no(new Error("Could not load the MP4 library. Check the connection and try again."));
+      document.head.append(el);
+    });
+  }
+
+  async function exportVideo({ width = 1080, height = 1920, fps = 60, duration = YEAR_SECONDS, bitrate = 50e6, start = 0 } = {}) {
+    if (!window.VideoEncoder) throw new Error("This browser cannot encode video. Use a current version of Chrome or Edge.");
+    if (!window.Mp4Muxer) await loadScript(MUXER_URL);
+    const base = {
+      // H.264 High: level 4.2 covers 1080p at 60 fps, level 5.2 covers up to 4K.
+      codec: width * height > 1920 * 1088 ? "avc1.640034" : "avc1.64002A",
+      width, height, bitrate, framerate: fps, latencyMode: "quality", avc: { format: "avc" },
+    };
+    let config = { ...base, hardwareAcceleration: "prefer-hardware" };
+    if (!(await VideoEncoder.isConfigSupported(config)).supported) config = base;
+    if (!(await VideoEncoder.isConfigSupported(config)).supported) throw new Error(`H.264 at ${width}x${height} is not available here.`);
+    await Promise.all(["500 14px Jost", "600 13px Jost", "400 13px Jost", '400 12px "DM Mono"'].map((f) => document.fonts.load(f)));
+
+    exporting = true;
+    const status = $("status");
+    status.hidden = false;
+    isolated = -1; hovered = -1;
+    refreshTargets();
+    showRoute();
+    on.fill(1);
+    try {
+      const target = new Mp4Muxer.ArrayBufferTarget();
+      const muxer = new Mp4Muxer.Muxer({ target, video: { codec: "avc", width, height, frameRate: fps }, fastStart: "in-memory" });
+      let failure = null;
+      const encoder = new VideoEncoder({ output: (chunk, m) => muxer.addVideoChunk(chunk, m), error: (e) => { failure = e; } });
+      encoder.configure(config);
+
+      const comp = document.createElement("canvas");
+      comp.width = width;
+      comp.height = height;
+      const ctx = comp.getContext("2d", { alpha: false });
+      const dpr = width / 540, W = 540, H = height / dpr;
+      const layout = videoLayout(W, H);
+      const viewAt = (time) => ({ W, H, dpr, dt: 1 / fps, clock: time, blocked: layout.blocked });
+
+      // Lead in so place names have already faded in on the first frame.
+      for (let i = -fps * 3; i < 0; i++) renderAt(start + i / fps, viewAt(start + i / fps));
+
+      const total = Math.round(duration * fps);
+      const began = performance.now();
+      for (let i = 0; i < total; i++) {
+        if (failure) throw failure;
+        const time = start + i / fps;
+        const t = renderAt(time, viewAt(time));
+        drawVideoOverlay(ctx, layout, t, dpr);
+        const videoFrame = new VideoFrame(comp, { timestamp: Math.round(i * 1e6 / fps), duration: Math.round(1e6 / fps) });
+        encoder.encode(videoFrame, { keyFrame: i % (fps * 2) === 0 });
+        videoFrame.close();
+        // Keep the queue short so frames do not pile up in memory.
+        while (encoder.encodeQueueSize > 8 && !failure) {
+          await new Promise((r) => {
+            encoder.addEventListener("dequeue", r, { once: true });
+            setTimeout(r, 500);
+          });
+        }
+        if (i % 30 === 0) {
+          status.textContent = `Exporting video: frame ${i.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`;
+          await new Promise((r) => setTimeout(r));
+        }
+      }
+      await encoder.flush();
+      if (failure) throw failure;
+      encoder.close();
+      muxer.finalize();
+      const blob = new Blob([target.buffer], { type: "video/mp4" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `migration-${ASIA ? "east-asia-siberia" : "across-the-americas"}-${width}x${height}-${fps}fps.mp4`;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(link.href), 60000);
+      return { bytes: blob.size, frames: total, seconds: (performance.now() - began) / 1000, acceleration: config.hardwareAcceleration ?? "no-preference" };
+    } finally {
+      status.hidden = true;
+      exporting = false;
+    }
+  }
+
+  // Export saves a file, which the hosted page's frame blocks, so the button appears only when served locally.
+  const exportButton = $("export");
+  exportButton.hidden = !["localhost", "127.0.0.1"].includes(location.hostname);
+  exportButton.addEventListener("click", async () => {
+    exportButton.disabled = true;
+    try {
+      await exportVideo();
+    } catch (e) {
+      console.error(e);
+      $("status").hidden = false;
+      $("status").textContent = `Export failed: ${e.message}`;
+      setTimeout(() => { $("status").hidden = true; }, 8000);
+    }
+    exportButton.disabled = false;
+  });
+
+  $("status").hidden = true;
+  // Lets a viewer or a test jump to a date or export from the console.
+  window.migration = {
+    seek(x) { seconds = x * YEAR_SECONDS; }, pause() { setPlaying(false); }, play() { setPlaying(true); }, exportVideo, flow, tracks, region: REGION, meta,
+  };
+  requestAnimationFrame((now) => { lastNow = now; frame(now); });
+}
+
+main().catch((e) => {
+  $("status").hidden = false;
+  $("status").textContent = e.message;
+  console.error(e);
+});
+</script>
+
+</body></html>

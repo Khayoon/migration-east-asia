@@ -1,0 +1,120 @@
+{
+  "Arctic Warbler": {
+    "breeding": "Siberian taiga and the Russian Far East",
+    "wintering": "Southeast Asia, the Philippines and Indonesia",
+    "via": "Eastern Asia, including China and Taiwan; some return through Mongolia",
+    "source": {
+      "title": "University of Copenhagen · Arctic Warbler tracking study",
+      "url": "https://researchprofiles.ku.dk/en/publications/from-siberia-to-indonesia-tracking-the-migration-of-the-arctic-wa/"
+    },
+    "note": "The tracking study followed one central Siberian bird; routes differ among populations."
+  },
+  "Siberian Rubythroat": {
+    "breeding": "Siberia and the Russian Far East",
+    "wintering": "Southern China and Southeast Asia",
+    "via": "Northeast China and the mainland East Asian corridor",
+    "source": {
+      "title": "Heim et al. · Full annual cycle tracking of Siberian Rubythroat",
+      "url": "https://macroecointern.dk/pdf-reprints/Heim_JO_2018.pdf"
+    },
+    "note": "Tracked Amur-region birds wintered in southern China and Indochina. Other populations can use different routes."
+  },
+  "Yellow-breasted Bunting": {
+    "breeding": "Siberia, Mongolia and the Russian Far East",
+    "wintering": "Southern China, Myanmar, Thailand and other parts of Southeast Asia",
+    "via": "China and the mainland East Asian corridor",
+    "source": {
+      "title": "Heim et al. · Migration routes of Yellow-breasted Bunting",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11666740/"
+    },
+    "note": "Tracked Baikal and Amur birds used Southeast Asia and southern China. The wider species range also includes northern India and Nepal."
+  },
+  "Rustic Bunting": {
+    "breeding": "The Eurasian taiga, including Siberia and Kamchatka",
+    "wintering": "Japan, the Korean Peninsula and eastern and central China",
+    "via": "The Russian Far East and eastern China",
+    "source": {
+      "title": "Edenius et al. · Global population decline in Rustic Bunting",
+      "url": "https://www.cambridge.org/core/journals/bird-conservation-international/article/next-common-and-widespread-bunting-to-go-global-population-decline-in-the-rustic-bunting-emberiza-rustica/33DD0A30F5A84E8873388277C07C1BAF"
+    }
+  },
+  "Siberian Crane": {
+    "breeding": "Northeastern Yakutia, Siberia",
+    "wintering": "Poyang Lake and nearby wetlands in China",
+    "via": "The Aldan and Amur basins, then northeast Chinese wetlands such as Momoge",
+    "source": {
+      "title": "Convention on Migratory Species · Eastern Siberian Crane monitoring",
+      "url": "https://siberian-crane.cms.int/page/monitoring-eastern-asian-population"
+    },
+    "note": "This map covers the eastern population; historic western and central migration routes are outside its scope."
+  },
+  "Hooded Crane": {
+    "breeding": "Central and southeastern Russia and northern China",
+    "wintering": "Mainly Izumi in southern Japan; also Korea and China's middle Yangtze wetlands",
+    "via": "Northeast China and the Korean Peninsula",
+    "source": {
+      "title": "International Crane Foundation · Hooded Crane",
+      "url": "https://savingcranes.org/species/hooded-crane/"
+    }
+  },
+  "White-naped Crane": {
+    "breeding": "Mongolia, northeast China and the Amur River basin",
+    "wintering": "Poyang Lake in China, or South Korea and southern Japan",
+    "via": "China for western birds; the Korean Peninsula for eastern birds",
+    "source": {
+      "title": "Tracking study · Breeding and migration performance of White-naped Cranes",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9617902/"
+    },
+    "note": "Western and eastern populations have different wintering grounds. The animation combines their seasonal distributions."
+  },
+  "Swan Goose": {
+    "breeding": "Mongolia and adjoining northeast Asian wetlands",
+    "wintering": "Wetlands along China's Yangtze River basin",
+    "via": "Northeast China, including the Yalu River estuary",
+    "source": {
+      "title": "USGS · Migration strategies of Swan Geese from northeast Mongolia",
+      "url": "https://www.usgs.gov/publications/migration-strategies-swan-geese-anser-cygnoides-northeast-mongolia"
+    },
+    "note": "Tracked Mongolian geese staged for weeks at the Yalu estuary before continuing to the Yangtze."
+  },
+  "Baikal Teal": {
+    "breeding": "Eastern Siberia, including the Kolyma and lower Lena regions",
+    "wintering": "South Korea, Japan and eastern China",
+    "via": "Northeast China and eastern Russia; several spring corridors are known",
+    "source": {
+      "title": "Nam et al. · Three spring migration routes of Baikal Teal",
+      "url": "https://www.jstage.jst.go.jp/article/osj/24/1/24_157/_article/-char/ja"
+    },
+    "note": "The cited satellite study followed birds wintering in South Korea."
+  },
+  "Great Knot": {
+    "breeding": "The mountains of eastern Siberia",
+    "wintering": "Coasts of Southeast Asia and Australia",
+    "via": "The Yellow Sea's coastal mudflats",
+    "source": {
+      "title": "BirdLife Australia · Great Knot",
+      "url": "https://birdlife.org.au/bird-profiles/great-knot/"
+    },
+    "note": "Other wintering populations occur around the northern Indian Ocean."
+  },
+  "Red-necked Stint": {
+    "breeding": "Northern Siberian tundra",
+    "wintering": "Coasts and wetlands of Southeast Asia and Australia",
+    "via": "Asian wetlands, the Yellow Sea and Indonesian stopovers",
+    "source": {
+      "title": "Victorian Wader Study Group · Red-necked Stint tracking",
+      "url": "https://vwsg.org.au/waders/geolocator-studies/red-necked-stint/"
+    },
+    "note": "Many short flights and varied stopovers connect the breeding and wintering grounds."
+  },
+  "Far Eastern Curlew": {
+    "breeding": "Russia and northeastern China",
+    "wintering": "Mainly coastal Australia; also Southeast Asian coasts",
+    "via": "Coastal East Asia, including the Yellow Sea",
+    "source": {
+      "title": "Australian Government · Eastern Curlew",
+      "url": "https://www.dcceew.gov.au/environment/biodiversity/threatened/action-plan/eastern-curlew"
+    },
+    "note": "Birds leave breeding areas from July to September and depart Australia mainly in February and March."
+  }
+}

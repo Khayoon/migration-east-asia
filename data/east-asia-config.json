@@ -1,0 +1,31 @@
+{
+  "title": "Migration across East Asia & Siberia",
+  "description": "A year of bird migration from Siberia and East Asia to China, Japan, Korea, Southeast Asia and Australia, animated from seasonal sightings.",
+  "colors": {
+    "Arctic Warbler": "#b9a7ff",
+    "Siberian Rubythroat": "#ff7a59",
+    "Yellow-breasted Bunting": "#ffe066",
+    "Rustic Bunting": "#4fd6a8",
+    "Siberian Crane": "#e9f6ff",
+    "Hooded Crane": "#5ab4ff",
+    "White-naped Crane": "#ff7ad9",
+    "Swan Goose": "#ffa62b",
+    "Baikal Teal": "#38d9e8",
+    "Great Knot": "#ee3f6d",
+    "Red-necked Stint": "#8fe04a",
+    "Far Eastern Curlew": "#d9c28a"
+  },
+  "places": [
+    ["Taymyr Peninsula", 73, 104], ["Lena Delta", 72, 127], ["Kolyma Lowlands", 68.5, 160],
+    ["Chukotka", 66.5, 174], ["Kamchatka", 56, 159], ["Yakutia", 63, 130],
+    ["Lake Baikal", 53, 108], ["Amur Basin", 50, 130], ["Mongolian wetlands", 48.5, 115],
+    ["Momoge", 45.9, 123.8], ["Yellow Sea", 37, 121], ["Yalu Estuary", 39.8, 124],
+    ["Korean Peninsula", 36.5, 127.5], ["Izumi", 32.1, 130.3], ["Poyang Lake", 29.1, 116.2],
+    ["Yangtze wetlands", 30, 114], ["Taiwan", 23.7, 121], ["Southern China", 23, 110],
+    ["Ganges Delta", 22, 90], ["Myanmar", 17, 96], ["Thailand", 14, 101], ["Vietnam", 15, 108],
+    ["Philippines", 12, 123], ["Malay Peninsula", 5, 102], ["Borneo", 1, 114],
+    ["Sumatra", -1, 102], ["Java", -7.5, 110], ["New Guinea", -5, 142],
+    ["Roebuck Bay", -18, 122.2], ["Gulf of Carpentaria", -17, 140], ["Moreton Bay", -27.3, 153.2],
+    ["Southern Australia", -36, 141], ["New Zealand", -39, 175]
+  ]
+}
